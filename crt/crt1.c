@@ -5,6 +5,18 @@
 
 #include "crt_arch.h"
 
+#if defined(__linx)
+/*
+ * Normal musl process startup is a single execution context, not a four-PE
+ * kernel launch. A dedicated PE launcher may override this weak hook with a
+ * strong definition returning 4 after establishing all four PE contexts.
+ */
+weak unsigned __pto_runtime_pe_context_count(void)
+{
+	return 1; /* PTO_RUNTIME_SINGLE_CONTEXTS */
+}
+#endif
+
 int main();
 weak void _init();
 weak void _fini();
