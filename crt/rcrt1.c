@@ -31,6 +31,12 @@ hidden void __dls2(unsigned char *base, size_t *sp)
 		__pto_runtime_group_context_get ?
 		__pto_runtime_group_context_get() : 0;
 	if (group_context) {
+		if (group_context->magic != PTO_RUNTIME_GROUP_CONTEXT_MAGIC ||
+		    group_context->version != PTO_RUNTIME_GROUP_CONTEXT_VERSION ||
+		    group_context->participant_count != PTO_RUNTIME_GROUP_PARTICIPANTS ||
+		    !group_context->state || !group_context->result ||
+		    !group_context->error)
+			__builtin_trap();
 		if (__linx_group_worker_start)
 			__linx_group_worker_start();
 		__builtin_trap();

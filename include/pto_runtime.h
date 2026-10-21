@@ -5,6 +5,7 @@
 
 #define PTO_RUNTIME_GROUP_CONTEXT_MAGIC 0x50544f47u
 #define PTO_RUNTIME_GROUP_CONTEXT_VERSION 1u
+#define PTO_RUNTIME_GROUP_PARTICIPANTS 4u
 #define PTO_RUNTIME_GROUP_STATE_READY 0u
 #define PTO_RUNTIME_GROUP_STATE_RUNNING 1u
 #define PTO_RUNTIME_GROUP_STATE_DONE 2u
@@ -19,8 +20,12 @@ struct pto_runtime_group_context {
 	volatile uint32_t *error;
 };
 
+_Static_assert(sizeof(struct pto_runtime_group_context) == 32,
+	"PTO runtime context ABI drift");
+
 /* state and result each point to a four-element PE-indexed array.  The
- * launcher owns storage and must publish the descriptor before common entry. */
+ * launcher owns storage and must publish the descriptor before common entry.
+ * State publication is ordered around the runtime rendezvous. */
 
 /* Launcher-owned hook; it must not perform libc work. */
 const struct pto_runtime_group_context *__pto_runtime_group_context_get(void);
