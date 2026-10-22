@@ -3,7 +3,7 @@
 	.hidden __clone
 	.type __clone,@function
 __clone:
-	C.BSTART.STD
+	BSTART.SYS FALL
 	andi	a1, -16,	->a1
 	subi	a1, 16,	->a1
 	sdi	a0, [a1, 0]
@@ -28,6 +28,7 @@ __clone:
 	setc.tgt	a1
 	C.BSTOP
 2:
+	BSTART.SYS FALL
 	addiw	zero, 93,	->a7
 	acrc 1
 	C.BSTART	DIRECT, 2b

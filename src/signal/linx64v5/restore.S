@@ -5,7 +5,7 @@
   .align 1
 __restore:
 __restore_rt:
-  C.BSTART.AUX
+  BSTART.SYS FALL
   addi	zero, 139,->t
   addi	t#1, 0, ->x1
   acrc 1

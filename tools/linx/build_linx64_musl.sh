@@ -13,6 +13,8 @@ esac
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 MUSL_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd -P)"
 
+python3 "$SCRIPT_DIR/check_acrc_blocks.py"
+
 LINX_ISA_ROOT="${LINX_ISA_ROOT:-/Users/zhoubot/linx-isa}"
 TARGET="${TARGET:-linx64-unknown-linux-musl}"
 MALLOC_IMPL="${MALLOC_IMPL:-oldmalloc}"
