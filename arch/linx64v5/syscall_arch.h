@@ -5,7 +5,7 @@ static inline long
 __internal_syscall(long n, long _a0, long _a1, long _a2, long _a3, long _a4, long _a5)
 {
   __asm__ __volatile__(
-	      "BSTART.SYS FALL\n"
+	   "C.BSTART.AUX\n"
       "1:\n"
       "ori %0, 0, ->a0\n"
       "ori %1, 0, ->a1\n"

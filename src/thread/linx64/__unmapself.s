@@ -3,10 +3,9 @@
 	.hidden __unmapself
 	.type __unmapself,@function
 __unmapself:
-	BSTART.SYS FALL
+	C.BSTART.STD
 	addiw	zero, 215,	->a7
 	acrc 1
-	BSTART.SYS FALL
 	c.movr	zero,	->a0
 	addiw	zero, 93,	->a7
 	acrc 1

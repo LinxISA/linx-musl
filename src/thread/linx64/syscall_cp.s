@@ -16,7 +16,6 @@ __cp_begin:
 	lwi	[a0, 0],	->x0
 	setc.ne	x0, zero
 	C.BSTOP
-	BSTART.SYS FALL
 	c.movr	a1,	->x3
 	c.movr	a2,	->a0
 	c.movr	a3,	->a1

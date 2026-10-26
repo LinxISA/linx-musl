@@ -2,7 +2,7 @@
 	.global vfork
 	.type vfork,@function
 vfork:
-	BSTART.SYS FALL
+	C.BSTART.STD
 	addiw	zero, 220,	->a7
 	lui	4,	->a0
 	addi	a0, 273,	->a0
