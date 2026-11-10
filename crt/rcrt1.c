@@ -27,6 +27,7 @@ int __libc_start_main(int (*)(), int, char **,
 
 hidden void __dls2(unsigned char *base, size_t *sp)
 {
+#if defined(__linx)
 	const struct pto_runtime_group_context *group_context =
 		__pto_runtime_group_context_get ?
 		__pto_runtime_group_context_get() : 0;
@@ -41,5 +42,6 @@ hidden void __dls2(unsigned char *base, size_t *sp)
 			__linx_group_worker_start();
 		__builtin_trap();
 	}
+#endif
 	__libc_start_main(main, *sp, (void *)(sp+1), _init, _fini, 0);
 }

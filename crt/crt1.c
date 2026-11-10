@@ -37,6 +37,7 @@ int __libc_start_main(int (*)(), int, char **,
 
 hidden void _start_c(long *p)
 {
+#if defined(__linx)
 	const struct pto_runtime_group_context *group_context =
 		__pto_runtime_group_context_get ?
 		__pto_runtime_group_context_get() : 0;
@@ -51,6 +52,7 @@ hidden void _start_c(long *p)
 			__linx_group_worker_start();
 		__builtin_trap();
 	}
+#endif
 	int argc = p[0];
 	char **argv = (void *)(p+1);
 	__libc_start_main(main, argc, argv, _init, _fini, 0);
