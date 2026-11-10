@@ -7,7 +7,7 @@ __restore:
 	.hidden __restore_rt
 	.type __restore_rt,@function
 __restore_rt:
-	C.BSTART.STD
+	BSTART.SYS FALL
 	addiw	zero, 139,	->a7
 	acrc 1
 	C.BSTART	DIRECT, __restore_rt

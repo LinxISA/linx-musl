@@ -13,6 +13,7 @@ static inline long __linx_syscall(long n, long a0, long a1, long a2, long a3, lo
 	long ret;
 
 	__asm__ volatile(
+		"BSTART.SYS FALL\n"
 		"c.movr %1, ->a0\n"
 		"c.movr %2, ->a1\n"
 		"c.movr %3, ->a2\n"
