@@ -21,3 +21,7 @@ __asm__(
 "	addi	t#1, 0, ->sp\n"
 "	BSTART DIRECT	_start_c\n"
 );
+
+/* Multi-PE launchers enter this same _start address on every PE. They must
+ * establish PE-local SP/TP before entry and provide the group descriptor via
+ * the runtime hook; ordinary single-context startup remains unchanged. */
