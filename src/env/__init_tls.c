@@ -79,7 +79,7 @@ typedef Elf64_Phdr Phdr;
 
 extern weak hidden const size_t _DYNAMIC[];
 
-static void static_init_tls(size_t *aux)
+static void init_tls(size_t *aux, int prebound)
 {
 	unsigned char *p;
 	size_t n;
@@ -130,6 +130,14 @@ static void static_init_tls(size_t *aux)
 		+ main_tls.size + main_tls.align
 		+ MIN_TLS_ALIGN-1 & -MIN_TLS_ALIGN;
 
+#if defined(__linx)
+	/* Layout metadata is process-wide; the platform owns the prebound TCBs,
+	 * TLS images and DTVs. Never reuse builtin_tls for four participants. */
+	if (prebound) {
+		if (!__get_tp()) a_crash();
+		return;
+	}
+#endif
 	if (libc.tls_size > sizeof builtin_tls) {
 #ifndef SYS_mmap2
 #define SYS_mmap2 SYS_mmap
@@ -150,4 +158,8 @@ static void static_init_tls(size_t *aux)
 		a_crash();
 }
 
+static void static_init_tls(size_t *aux) { init_tls(aux, 0); }
 weak_alias(static_init_tls, __init_tls);
+#if defined(__linx)
+void __pto_musl_init_tls(size_t *aux) { init_tls(aux, 1); }
+#endif
