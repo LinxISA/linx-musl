@@ -20,7 +20,7 @@ weak_alias(dummy1, __init_ssp);
 #ifdef __GNUC__
 __attribute__((__noinline__))
 #endif
-static void init_libc(char **envp, char *pn, int prebound_tls)
+void __init_libc(char **envp, char *pn)
 {
 	size_t i, *auxv, aux[AUX_CNT] = { 0 };
 	__environ = envp;
@@ -36,13 +36,7 @@ static void init_libc(char **envp, char *pn, int prebound_tls)
 	__progname = __progname_full = pn;
 	for (i=0; pn[i]; i++) if (pn[i]=='/') __progname = pn+i+1;
 
-#if defined(__linx)
-	if (prebound_tls) {
-		extern void __pto_musl_init_tls(size_t *);
-		__pto_musl_init_tls(aux);
-	} else
-#endif
-		__init_tls(aux);
+	__init_tls(aux);
 	__init_ssp((void *)aux[AT_RANDOM]);
 
 	if (aux[AT_UID]==aux[AT_EUID] && aux[AT_GID]==aux[AT_EGID]
@@ -61,20 +55,6 @@ static void init_libc(char **envp, char *pn, int prebound_tls)
 			a_crash();
 	libc.secure = 1;
 }
-
-void __init_libc(char **envp, char *pn)
-{
-	init_libc(envp, pn, 0);
-}
-
-#if defined(__linx)
-/* The launcher has already installed four distinct musl-compatible TCB/TLS
- * areas. PE0 initializes process globals without rebinding its TP. */
-void __pto_musl_init_libc(char **envp, char *pn)
-{
-	init_libc(envp, pn, 1);
-}
-#endif
 
 static void libc_start_init(void)
 {

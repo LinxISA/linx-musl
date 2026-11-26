@@ -1,9 +1,6 @@
 #include <stddef.h>
 #include "dynlink.h"
 #include "libc.h"
-#if defined(__linx) && defined(LINX_PTO_STATIC_PIE)
-#include "pto_startup.h"
-#endif
 
 #ifndef START
 #define START "_dlstart"
@@ -23,10 +20,6 @@
 
 hidden void _dlstart_c(size_t *sp, size_t *dynv)
 {
-#if defined(__linx) && defined(LINX_PTO_STATIC_PIE)
-	/* Do not allow secondary PEs to race shared self-relocation stores. */
-	if (__builtin_linx_get_thread_idx() != 0) __pto_startup_fault();
-#endif
 	size_t i, aux[AUX_CNT], dyn[DYN_CNT];
 	size_t *rel, rel_size, base;
 

@@ -7,7 +7,6 @@
 
 #if defined(__linx)
 #include <pto_runtime.h>
-#include "pto_startup.h"
 /*
  * Normal musl process startup is a single execution context, not a four-PE
  * kernel launch. A dedicated PE launcher may override this weak hook with a
@@ -27,6 +26,7 @@ __pto_runtime_group_context_get(void)
 	return 0;
 }
 
+weak void __linx_group_worker_start(void) __attribute__((noreturn));
 #endif
 
 int main();
@@ -47,14 +47,11 @@ hidden void _start_c(long *p)
 		    group_context->participant_count != PTO_RUNTIME_GROUP_PARTICIPANTS ||
 		    !group_context->state || !group_context->result ||
 		    !group_context->error)
-			__pto_startup_fault();
-		extern void __pto_musl_group_start(long *) __attribute__((noreturn));
-		__pto_musl_group_start((long *)p);
-		__pto_startup_fault();
+			__builtin_trap();
+		if (__linx_group_worker_start)
+			__linx_group_worker_start();
+		__builtin_trap();
 	}
-	if (__builtin_linx_get_thread_idx() != 0 ||
-	    __pto_runtime_pe_context_count() != 1)
-		__pto_startup_fault();
 #endif
 	int argc = p[0];
 	char **argv = (void *)(p+1);
